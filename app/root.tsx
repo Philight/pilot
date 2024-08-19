@@ -215,7 +215,7 @@ function App() {
 
 // export default withWeaverse(App);
 // export default withSentry(App);
-export default compose(withWeaverse, withSentry)(App);
+export default compose(withSentry, withWeaverse)(App);
 
 export function ErrorBoundary({ error }: { error: Error }) {
   const routeError = useRouteError();

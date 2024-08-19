@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { vitePlugin as remix } from "@remix-run/dev";
 import { hydrogen } from "@shopify/hydrogen/vite";
 import { oxygen } from "@shopify/mini-oxygen/vite";
@@ -17,15 +18,24 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
+    sentryVitePlugin({
+      org: "freelance-0h",
+      project: "javascript-remix",
+    }),
   ],
   build: {
     // Allow a strict Content-Security-Policy
     // without inlining assets as base64:
     assetsInlineLimit: 0,
+
+    sourcemap: true,
   },
   ssr: {
     optimizeDeps: {
       include: [
+        "change-emitter",
+        "fbjs/lib/shallowEqual",
+        "hoist-non-react-statics",
         "typographic-trademark",
         "typographic-single-spaces",
         "typographic-registered-trademark",
