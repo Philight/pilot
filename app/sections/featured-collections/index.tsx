@@ -24,7 +24,7 @@ let FeaturedCollections = forwardRef<HTMLElement, FeaturedCollectionsProps>(
         {children}
       </Section>
     );
-  },
+  }
 );
 
 export default FeaturedCollections;
@@ -46,6 +46,17 @@ let COLLECTIONS_QUERY = `#graphql
           height
           url
         }
+        products(first: 1, sortKey: BEST_SELLING) {
+          nodes {
+            featuredImage {
+              id
+              altText
+              width
+              height
+              url
+            }
+          }          
+        }        
       }
     }
   }
@@ -57,9 +68,26 @@ export let loader = async ({
   data,
   weaverse,
 }: ComponentLoaderArgs<FeaturedCollectionsData>) => {
+  const STATIC_DATA = {
+    width: "fixed",
+    gap: 32,
+    verticalPadding: "medium",
+    collections: [
+      {
+        id: 463018295618,
+        handle: "frontpage",
+      },
+      {
+        id: 463018328386,
+        handle: "automated-collection",
+      },
+    ],
+  };
+  data = STATIC_DATA;
+
   let { language, country } = weaverse.storefront.i18n;
   let ids = data.collections?.map(
-    (collection) => `gid://shopify/Collection/${collection.id}`,
+    (collection) => `gid://shopify/Collection/${collection.id}`
   );
   if (ids?.length) {
     let { nodes } = await weaverse.storefront.query<CollectionsByIdsQuery>(
@@ -70,7 +98,7 @@ export let loader = async ({
           language,
           ids,
         },
-      },
+      }
     );
     return nodes.filter(Boolean);
   }

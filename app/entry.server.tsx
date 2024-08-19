@@ -7,10 +7,10 @@ import { renderToReadableStream } from "react-dom/server";
 
 import { getWeaverseCsp } from "~/weaverse/csp";
 
+// --------------------------------------------------------------------
 
 export const handleError = Sentry.sentryHandleError;
 
-// --------------------------------------------------------------------
 Sentry.init({
   dsn: "https://033bf20c3c27c0d77c9344f6c4a6b28d@o4507801240010753.ingest.de.sentry.io/4507801244794960",
   // Set tracesSampleRate to 1.0 to capture 100%

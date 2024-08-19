@@ -98,6 +98,10 @@ let CollectionItems = forwardRef<HTMLDivElement, CollectionItemsProps>(
     if (!collections?.length) {
       collections = Array(Number(gridSize)).fill(COLLECTION_PLACEHOLDER);
     }
+
+    const getCollectionImage = (coll) =>
+      coll?.image || coll?.products?.nodes[0]?.featuredImage;
+
     return (
       <div
         ref={ref}
@@ -108,7 +112,7 @@ let CollectionItems = forwardRef<HTMLDivElement, CollectionItemsProps>(
             "overflow-x-scroll md:overflow-x-hidden hidden-scroll scroll-px-6",
             "grid w-full grid-flow-col md:grid-flow-row justify-start gap-2",
           ],
-          variants({ gridSize, gap }),
+          variants({ gridSize, gap })
         )}
       >
         {collections.map((collection, ind) => (
@@ -117,20 +121,20 @@ let CollectionItems = forwardRef<HTMLDivElement, CollectionItemsProps>(
             to={`/collections/${collection.handle}`}
             className="relative w-[67vw] md:w-auto group group/overlay"
           >
-            {collection?.image && (
+            {getCollectionImage(collection) && (
               <div
                 className={clsx("overflow-hidden", variants({ borderRadius }))}
                 style={{
                   aspectRatio: getImageAspectRatio(
-                    collection?.image || {},
-                    aspectRatio,
+                    getCollectionImage(collection) || {},
+                    aspectRatio
                   ),
                 }}
               >
                 <Image
-                  data={collection.image}
-                  width={collection.image.width || 600}
-                  height={collection.image.height || 400}
+                  data={getCollectionImage(collection)}
+                  width={getCollectionImage(collection).width || 600}
+                  height={getCollectionImage(collection).height || 400}
                   sizes="(max-width: 32em) 100vw, 45vw"
                   className={clsx([
                     "w-full h-full object-cover",
@@ -159,7 +163,7 @@ let CollectionItems = forwardRef<HTMLDivElement, CollectionItemsProps>(
                 className={clsx(
                   contentPosition === "over"
                     ? "text-center space-y-4 xl:space-y-7 px-4 py-16 text-[var(--col-name-color)]"
-                    : "py-4",
+                    : "py-4"
                 )}
               >
                 {contentPosition === "over" ? (
@@ -186,7 +190,7 @@ let CollectionItems = forwardRef<HTMLDivElement, CollectionItemsProps>(
         ))}
       </div>
     );
-  },
+  }
 );
 
 let COLLECTION_PLACEHOLDER: FeaturedCollectionsLoaderData[0] = {

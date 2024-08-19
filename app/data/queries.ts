@@ -222,6 +222,7 @@ export let COLLECTION_QUERY = `#graphql
     collections(first: 100) {
       edges {
         node {
+          id
           title
           handle
         }
@@ -440,4 +441,30 @@ export let VARIANTS_QUERY = `#graphql
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
+` as const;
+
+export let PAGES_QUERY = `#graphql
+  query PageDetails($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+      pages(first: 100) {
+        edges {
+          node {
+            id
+            handle
+            title
+            onlineStoreUrl
+            bodySummary
+          }
+        }
+        nodes {
+            handle
+            title
+          
+        }
+        pageInfo {
+          endCursor
+          startCursor
+        }
+      }
+    }
 ` as const;

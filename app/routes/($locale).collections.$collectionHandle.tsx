@@ -36,7 +36,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
 
   const { sortKey, reverse } = getSortValuesFromParam(
-    searchParams.get("sort") as SortParam,
+    searchParams.get("sort") as SortParam
   );
   const filters = [...searchParams.entries()].reduce(
     (filters, [key, value]) => {
@@ -48,7 +48,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
       }
       return filters;
     },
-    [] as ProductFilter[],
+    [] as ProductFilter[]
   );
 
   const { collection, collections } = await context.storefront.query(
@@ -62,8 +62,9 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
         reverse,
         country: context.storefront.i18n.country,
         language: context.storefront.i18n.language,
+        first: 4,
       },
-    },
+    }
   );
 
   if (!collection) {
@@ -73,7 +74,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const seo = seoPayload.collection({ collection, url: request.url });
 
   const allFilterValues = collection.products.filters.flatMap(
-    (filter) => filter.values,
+    (filter) => filter.values
   );
 
   const appliedFilters = filters

@@ -329,8 +329,31 @@ const LAYOUT_QUERY = `#graphql
   }
 ` as const;
 
+const CUSTOM_MENU_ITEMS = [
+  {
+    id: "gid://shopify/MenuItem/578122229842",
+    resourceId: null,
+    resource: null,
+    tags: [],
+    title: "Automated",
+    type: "COLLECTION",
+    url: "https://magexo-interview.myshopify.com/collections/automated-collection",
+    items: [],
+  },
+  {
+    id: "gid://shopify/MenuItem/578122239842",
+    resourceId: null,
+    resource: null,
+    tags: [],
+    title: "Frontpage",
+    type: "COLLECTION",
+    url: "https://magexo-interview.myshopify.com/collections/frontpage",
+    items: [],
+  },
+];
+
 async function getLayoutData({ storefront, env }: AppLoadContext) {
-  const data = await storefront.query(LAYOUT_QUERY, {
+  let data = await storefront.query(LAYOUT_QUERY, {
     variables: {
       headerMenuHandle: "main-menu",
       footerMenuHandle: "footer",
@@ -339,6 +362,13 @@ async function getLayoutData({ storefront, env }: AppLoadContext) {
   });
 
   invariant(data, "No data returned from Shopify API");
+
+  // mageXo: Inject custom menu items
+
+  data.headerMenu = {
+    ...data.headerMenu,
+    items: data.headerMenu.items.concat(CUSTOM_MENU_ITEMS),
+  };
 
   /*
       Modify specific links/routes (optional)
