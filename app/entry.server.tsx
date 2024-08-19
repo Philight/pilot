@@ -5,13 +5,25 @@ import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 
 import { getWeaverseCsp } from "~/weaverse/csp";
+import * as Sentry from "@sentry/remix";
+
+// --------------------------------------------------------------------
+
+Sentry.init({
+  dsn: "__DSN__",
+  tracesSampleRate: 1,
+  // integrations: [new Sentry.Integrations.Prisma({ client: prisma })],
+  // ...
+});
+
+// --------------------------------------------------------------------
 
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  context: AppLoadContext,
+  context: AppLoadContext
 ) {
   const { nonce, header, NonceProvider } = createContentSecurityPolicy({
     ...getWeaverseCsp(request, context),
@@ -32,7 +44,7 @@ export default async function handleRequest(
         console.error(error);
         responseStatusCode = 500;
       },
-    },
+    }
   );
 
   if (isbot(request.headers.get("user-agent"))) {

@@ -9,6 +9,8 @@ import { SHOP_QUERY } from "~/data/queries";
 import { seoPayload } from "~/lib/seo.server";
 import { WeaverseContent } from "~/weaverse";
 
+import util from "util";
+
 export const headers = routeHeaders;
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -22,6 +24,13 @@ export async function loader(args: LoaderFunctionArgs) {
     type = "CUSTOM";
   }
   let weaverseData = await context.weaverse.loadPage({ type });
+  console.log("INDEX | weaverseData");
+  console.dir(weaverseData, { depth: 4 });
+  console.log(
+    util.inspect(weaverseData, { showHidden: false, depth: null, colors: true })
+  );
+  // console.log(JSON.stringify(weaverseData?.page, null, 1));
+
   if (!weaverseData?.page?.id || weaverseData.page.id.includes("fallback")) {
     throw new Response(null, { status: 404 });
   }

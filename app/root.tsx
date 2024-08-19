@@ -40,6 +40,11 @@ import { NotFound } from "./modules/NotFound";
 import styles from "./styles/app.css?url";
 import { GlobalStyle } from "./weaverse/style";
 
+import { compose } from "recompose";
+import { withSentry } from "@sentry/remix";
+
+// --------------------------------------------------------------------
+
 export type RootLoader = typeof loader;
 
 export let shouldRevalidate: ShouldRevalidateFunction = ({
@@ -153,6 +158,8 @@ export const meta = ({ data }: MetaArgs<typeof loader>) => {
   return getSeoMeta(data?.seo as SeoConfig);
 };
 
+// --------------------------------------------------------------------
+
 function Layout({ children }: { children?: React.ReactNode }) {
   const nonce = useNonce();
   const data = useRouteLoaderData<RootLoader>("root");
@@ -206,7 +213,9 @@ function App() {
   );
 }
 
-export default withWeaverse(App);
+// export default withWeaverse(App);
+// export default withSentry(App);
+export default compose(withWeaverse, withSentry)(App);
 
 export function ErrorBoundary({ error }: { error: Error }) {
   const routeError = useRouteError();
@@ -346,7 +355,7 @@ async function getLayoutData({ storefront, env }: AppLoadContext) {
         data.headerMenu,
         data.shop.primaryDomain.url,
         env,
-        customPrefixes,
+        customPrefixes
       )
     : undefined;
 
@@ -355,7 +364,7 @@ async function getLayoutData({ storefront, env }: AppLoadContext) {
         data.footerMenu,
         data.shop.primaryDomain.url,
         env,
-        customPrefixes,
+        customPrefixes
       )
     : undefined;
 
